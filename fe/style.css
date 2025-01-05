@@ -1,0 +1,11 @@
+/* Stiluri generale pentru ecrane mari */
+.element {
+    width: 70%;
+    }
+    
+/* Stiluri specifice pentru ecrane mai mici (de exemplu, tablete și telefoane) */
+@media screen and (max-width: 600px) {
+    .element {
+        width: 100%;
+    }
+}
