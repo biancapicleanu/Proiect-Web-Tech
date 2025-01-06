@@ -1,89 +1,60 @@
-import React, { useState, useEffect } from "react";
-
-import { MovieCard } from "../../components/MovieCard";
-
+import React, { useState } from "react";
 import "./style.css";
-import { CreateMovieModal } from "../../components/CreateMovieModal";
-import { Searchbar } from "../../components/Searchbar";
 
 const SERVER_URL = "http://localhost:8080/api/v1";
 
-const Movies = () => {
-    // declaram o variabila state pentru a stoca filmele - inițial este un array gol
-    const [movies, setMovies] = useState([]);
-    // declaram o variabila state pentru a determina daca afisam sau nu modala
-    const [isModalOpen, setIsModalOpen] = useState(false);
+const Login = () => {
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [message, setMessage] = useState("");
 
-    const getMovies = (queryTitle) => {
-        const queryParams = new URLSearchParams();
+    const handleLogin = async () => {
+        const loginData = { email, password };
 
-        if (!!queryTitle) {
-            queryParams.append("title", queryTitle);
+        try {
+            const response = await fetch(`${SERVER_URL}/users/login`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(loginData),
+            });
+
+            if (response.ok) {
+                const user = await response.json();
+                setMessage(`Welcome back, ${user.email}!`);
+            } else {
+                const error = await response.json();
+                setMessage(`Error: ${error.message}`);
+            }
+        } catch (error) {
+            console.error("Login failed:", error);
+            setMessage("An unexpected error occurred.");
         }
-
-        // apelam metoda expusa de backend pentru a prelua filmele si le setam in state
-        fetch(`${SERVER_URL}/movies?` + queryParams)
-            .then((res) => res.json())
-            .then((data) => setMovies(data.movies));
-    };
-
-    const addMovie = (movie) => {
-        fetch(`${SERVER_URL}/movies`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify(movie),
-        })
-            .then((res) => getMovies())
-            .catch((err) => console.log(err));
-    };
-
-    const deleteMovie = (movie) => {
-        fetch(`${SERVER_URL}/movies/${movie.id}`, { method: "DELETE" })
-            .then((res) => getMovies())
-            .catch((err) => console.log(err));
-    };
-
-    useEffect(() => {
-        // in momentul in care pagina este adaugata in DOM
-        // se preiau datele din backend
-        getMovies();
-    }, []);
-
-    const openModal = () => {
-        setIsModalOpen(true);
-    };
-
-    const closeModal = () => {
-        setIsModalOpen(false);
     };
 
     return (
-        <div>
-            <div className="container">
-                <h3>All movies</h3>
-                <Searchbar openModal={openModal} getMovies={getMovies} />
-                <div id="moviesContainer">
-                    {/* sintaxa de JSX, pentru fiecare film din lista este afisata o componenta de tip MovieCard */}
-                    {movies.map((movie, index) => (
-                        <MovieCard
-                            movie={movie}
-                            key={index}
-                            onDelete={deleteMovie}
-                        />
-                    ))}
-                </div>
-            </div>
-            {/* randare conditionala */}
-            {isModalOpen && (
-                <CreateMovieModal
-                    onAddMovie={addMovie}
-                    closeModal={closeModal}
-                />
-            )}
+        <div className="login-page">
+            <h2>Log In</h2>
+            {message && <p className="feedback-message">{message}</p>}
+            <input
+                type="email"
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+            />
+            <input
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+            />
+            <button onClick={handleLogin}>Log In</button>
+            <p>
+                Don't have an account? <a href="/signup">Sign Up</a>
+            </p>
         </div>
     );
 };
 
-export { Movies };
+export default Login;

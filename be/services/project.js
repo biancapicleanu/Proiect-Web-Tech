@@ -1,10 +1,12 @@
 import { Project } from "../models/config.js";
 
 const createProject = async (data) => {
-    const { name, state, repoURL } = data;
+    const { name, repoURL } = data;
 
-    if (!name || !state || !repoURL) {
-        throw Error("Incomplete data: name, state, and repoURL are required to create a project.");
+    if (!name || !repoURL) {
+        throw Error(
+            "Incomplete data: name and repoURL are required to create a project."
+        );
     }
 
     const existingProject = await Project.findOne({ where: { repoURL } });
@@ -14,13 +16,10 @@ const createProject = async (data) => {
 
     const newProject = await Project.create({
         name,
-        state,
-        repoURL
+        repoURL,
     });
 
     return newProject;
 };
 
-export {
-    createProject
-};
+export { createProject };
