@@ -1,34 +1,38 @@
 export const MpTemplate = (db, DataTypes) => {
-    return db.define("MP", {
-        userId: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            references: {
-                model: 'User', 
-                key: 'id'
+    return db.define(
+        "Mp",
+        {
+            user_id: {
+                type: DataTypes.INTEGER,
+                allowNull: false,
+                references: {
+                    model: "users",
+                    key: "id",
+                },
+                onUpdate: "CASCADE",
+                onDelete: "CASCADE",
+                primaryKey: true,
             },
-            onUpdate: 'CASCADE',
-            onDelete: 'CASCADE',
-            primaryKey: true 
+            project_id: {
+                type: DataTypes.INTEGER,
+                allowNull: false,
+                references: {
+                    model: "projects",
+                    key: "id",
+                },
+                onUpdate: "CASCADE",
+                onDelete: "CASCADE",
+                primaryKey: true,
+            },
         },
-        projectId: {
-            type: DataTypes.INTEGER,
-            allowNull: false,
-            references: {
-                model: 'Project', 
-                key: 'id'
-            },
-            onUpdate: 'CASCADE',
-            onDelete: 'CASCADE',
-            primaryKey: true 
+        {
+            underscored: true,
+            indexes: [
+                {
+                    unique: true,
+                    fields: ["user_id", "project_id"],
+                },
+            ],
         }
-    }, {
-        underscored: true,
-        indexes: [
-            {
-                unique: true,
-                fields: ['user_id', 'project_id']
-            }
-        ]
-    });
-}
+    );
+};

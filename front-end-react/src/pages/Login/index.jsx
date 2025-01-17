@@ -3,6 +3,8 @@ import "./style.css";
 
 const SERVER_URL = "http://localhost:8080/api/v1";
 
+export let userDetails;
+
 const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -21,8 +23,13 @@ const Login = () => {
             });
 
             if (response.ok) {
-                const user = await response.json();
-                setMessage(`Welcome back, ${user.email}!`);
+                userDetails = await response.json();
+                setMessage(`Welcome back, ${userDetails.email}!`);
+                console.log(userDetails);
+                localStorage.setItem(
+                    "userDetails",
+                    JSON.stringify(userDetails)
+                );
             } else {
                 const error = await response.json();
                 setMessage(`Error: ${error.message}`);

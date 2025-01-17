@@ -3,46 +3,54 @@ import "./style.css";
 
 const SERVER_URL = "http://localhost:8080/api/v1";
 
-const AddProject = ({ currentUser }) => {
+const AddProject = () => {
     const [url, setURL] = useState("");
     const [name, setName] = useState("");
     const [message, setMessage] = useState("");
     const [projectId, setProjectId] = useState(null);
 
+    let currentUser = undefined;
+    if (localStorage.getItem("userDetails")) {
+        currentUser = JSON.parse(localStorage.getItem("userDetails"));
+    }
     const handleAddProject = async () => {
         const projectData = {
             name,
             repoURL: url,
         };
 
-        console.log("Attempting to create project with data:", projectData);
+        if (currentUser) {
+            console.log("Attempting to create project with data:", projectData);
 
-        try {
-            const response = await fetch(`${SERVER_URL}/projects`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(projectData),
-            });
+            try {
+                const response = await fetch(`${SERVER_URL}/projects`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(projectData),
+                });
 
-            console.log("Response from /projects:", response);
+                console.log("Response from /projects:", response);
 
-            if (response.ok) {
-                const result = await response.json();
-                console.log("Project created successfully:", result);
-                setProjectId(result.id);
-                setMessage(`Project "${result.name}" added successfully!`);
+                if (response.ok) {
+                    const result = await response.json();
+                    console.log("Project created successfully:", result);
+                    console.log("Result ID:", result.project.id);
+                    setProjectId(result.project.id);
+                    setMessage(`Project "${result.name}" added successfully!`);
 
-                await addCurrentUserAsMP(result.id, currentUser.id);
-            } else {
-                const errorData = await response.json();
-                console.error("Error response from /projects:", errorData);
-                setMessage(`Error: ${errorData.message}`);
+                    console.log("Current user: " + currentUser);
+                    await addCurrentUserAsMP(result.project.id, currentUser.id);
+                } else {
+                    const errorData = await response.json();
+                    console.error("Error response from /projects:", errorData);
+                    setMessage(`Error: ${errorData.message}`);
+                }
+            } catch (error) {
+                console.error("Error adding project:", error);
+                setMessage("An unexpected error occurred. Please try again.");
             }
-        } catch (error) {
-            console.error("Error adding project:", error);
-            setMessage("An unexpected error occurred. Please try again.");
         }
     };
 
