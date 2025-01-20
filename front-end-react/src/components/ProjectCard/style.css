@@ -1,0 +1,10 @@
+.project-card-details {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 20px;
+    background-color: #313131;
+}
+
+.project-card-details h2 {
+    margin-bottom: 10px;
+}

@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import ProjectCard from "../../components/ProjectCard";
+import { useNavigate } from "react-router-dom";
 import "./style.css";
 
 const SERVER_URL = "http://localhost:8080/api/v1";
 
-const MpProjects = () => {
+const TstProjects = () => {
     const [projects, setProjects] = useState([]);
-    const [bugCounts, setBugCounts] = useState({});
     const [selectedProject, setSelectedProject] = useState(null);
     const [message, setMessage] = useState("");
+
     const navigate = useNavigate();
 
     let currentUser = undefined;
@@ -21,19 +21,11 @@ const MpProjects = () => {
         const fetchProjects = async () => {
             try {
                 const response = await fetch(
-                    `${SERVER_URL}/projects/mp/${currentUser.id}`
+                    `${SERVER_URL}/projects/tst/${currentUser.id}`
                 );
                 if (response.ok) {
                     const data = await response.json();
                     setProjects(data);
-
-                    const bugCountsResponse = await fetch(
-                        `${SERVER_URL}/bugs/count/${currentUser.id}`
-                    );
-                    if (bugCountsResponse.ok) {
-                        const counts = await bugCountsResponse.json();
-                        setBugCounts(counts);
-                    }
                 } else {
                     setMessage("Error fetching your projects.");
                 }
@@ -50,14 +42,15 @@ const MpProjects = () => {
 
     const handleProjectClick = (project) => {
         setSelectedProject(project);
+        console.log(project);
     };
 
-    const handleViewBugs = (projectId) => {
-        navigate(`/projects/${projectId}/bugs`);
+    const handleAddBug = (projectId) => {
+        navigate(`/add-bug/${projectId}`);
     };
 
     return (
-        <div className="mp-projects-page">
+        <div className="tst-projects-page">
             <h2>Your Projects</h2>
             {message && <p className="feedback-message">{message}</p>}
             <div className="projects-list">
@@ -72,28 +65,10 @@ const MpProjects = () => {
                             padding: "10px",
                             marginBottom: "10px",
                             cursor: "pointer",
-                            position: "relative",
                         }}
                     >
                         <h3>{project.name}</h3>
                         <p>Repository: {project.repoURL}</p>
-                        {bugCounts[project.id] !== undefined && (
-                            <span
-                                style={{
-                                    position: "absolute",
-                                    top: "10px",
-                                    right: "10px",
-                                    backgroundColor: "red",
-                                    color: "white",
-                                    padding: "5px 10px",
-                                    borderRadius: "50%",
-                                    fontSize: "14px",
-                                    fontWeight: "bold",
-                                }}
-                            >
-                                {bugCounts[project.id]}
-                            </span>
-                        )}
                     </div>
                 ))}
             </div>
@@ -101,18 +76,10 @@ const MpProjects = () => {
                 <div className="selected-project-details">
                     <ProjectCard project={selectedProject} />
                     <button
-                        onClick={() => handleViewBugs(selectedProject.id)}
-                        style={{
-                            marginTop: "10px",
-                            padding: "10px 15px",
-                            backgroundColor: "#007bff",
-                            color: "white",
-                            border: "none",
-                            borderRadius: "5px",
-                            cursor: "pointer",
-                        }}
+                        id="bug-button"
+                        onClick={() => handleAddBug(selectedProject.id)}
                     >
-                        View Bugs
+                        Add new bug
                     </button>
                 </div>
             )}
@@ -120,4 +87,4 @@ const MpProjects = () => {
     );
 };
 
-export default MpProjects;
+export default TstProjects;

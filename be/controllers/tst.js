@@ -2,6 +2,7 @@ import * as tstsService from "../services/tst.js";
 
 const createTST = async (req, res) => {
     try {
+        console.log(req.body);
         const tst = await tstsService.createTST(req.body);
         res.status(201).send({ tst });
     } catch (err) {
@@ -9,6 +10,4 @@ const createTST = async (req, res) => {
     }
 };
 
-export {
-    createTST,
-};
+export { createTST };

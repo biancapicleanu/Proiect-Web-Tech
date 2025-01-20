@@ -42,4 +42,17 @@ const loginUser = async (email, password) => {
     };
 };
 
-export { createUser, loginUser };
+const allUsers = async () => {
+    const users = await User.findAll();
+
+    if (!users || users.length === 0) {
+        throw new Error("No users found.");
+    }
+
+    return users.map((user) => ({
+        id: user.id,
+        email: user.email,
+    }));
+};
+
+export { createUser, loginUser, allUsers };

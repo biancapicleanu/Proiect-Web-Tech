@@ -11,14 +11,43 @@ const createBug = async (req, res) => {
 
 const allocateMpToBug = async (req, res) => {
     try {
-        const bug = await bugsService.allocateMpToBug(req.params.bugId, req.body.mpId);
+        const bug = await bugsService.allocateMpToBug(
+            req.params.bugId,
+            req.body.mpId
+        );
         res.status(200).send({ bug });
     } catch (err) {
         res.status(400).send({ message: err.message });
     }
 };
 
-export {
-    createBug,
-    allocateMpToBug
+const getBugsCount = async (req, res) => {
+    try {
+        const bugs = await bugsService.getBugsCount(req.params.userId);
+        res.status(200).send({ bugs });
+    } catch (err) {
+        res.status(400).send({ message: err.message });
+    }
 };
+
+const getProjectBugs = async (req, res) => {
+    try {
+        const bugs = await bugsService.getProjectBugs(req.params.projectId);
+        res.status(200).send({ bugs });
+    } catch (err) {
+        res.status(400).send({ message: err.message });
+    }
+};
+
+const updateBug = async (req, res) => {
+    try {
+        console.log(req.params);
+        console.log(req.body);
+        const bug = await bugsService.updateBug(req.params, req.body);
+        res.status(200).send({ bug });
+    } catch (err) {
+        res.status(400).send({ message: err.message });
+    }
+};
+
+export { createBug, allocateMpToBug, getBugsCount, getProjectBugs, updateBug };

@@ -21,4 +21,35 @@ const createProject = async (req, res) => {
     }
 };
 
-export { createProject };
+const getAllProjects = async (req, res) => {
+    try {
+        const projects = await projectsService.allProjects();
+        res.status(200).json(projects);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+const getMpProjects = async (req, res) => {
+    try {
+        const projects = await projectsService.getMpProjects(req.params.userId);
+        console.log(projects);
+        res.status(200).json(projects);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+const getTstProjects = async (req, res) => {
+    try {
+        const projects = await projectsService.getTstProjects(
+            req.params.userId
+        );
+        console.log(projects);
+        res.status(200).json(projects);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+export { createProject, getAllProjects, getMpProjects, getTstProjects };

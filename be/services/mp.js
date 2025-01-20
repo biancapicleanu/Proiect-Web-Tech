@@ -17,4 +17,17 @@ const createMP = async (projectId, userId) => {
     return newMP;
 };
 
-export { createMP };
+const allMPs = async () => {
+    const mps = await Mp.findAll();
+
+    if (!mps || mps.length === 0) {
+        throw new Error("No mps found.");
+    }
+
+    return mps.map((mp) => ({
+        userId: mp.user_id,
+        projectId: mp.project_id,
+    }));
+};
+
+export { createMP, allMPs };

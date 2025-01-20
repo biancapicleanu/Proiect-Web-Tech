@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./style.css";
 
 const SERVER_URL = "http://localhost:8080/api/v1";
@@ -6,6 +6,8 @@ const SERVER_URL = "http://localhost:8080/api/v1";
 const AddProject = () => {
     const [url, setURL] = useState("");
     const [name, setName] = useState("");
+    const [users, setUsers] = useState([]);
+    const [selectedUsers, setSelectedUsers] = useState([]);
     const [message, setMessage] = useState("");
     const [projectId, setProjectId] = useState(null);
 
@@ -13,6 +15,30 @@ const AddProject = () => {
     if (localStorage.getItem("userDetails")) {
         currentUser = JSON.parse(localStorage.getItem("userDetails"));
     }
+
+    // Fetch all users except the current user
+    useEffect(() => {
+        const fetchUsers = async () => {
+            try {
+                const response = await fetch(`${SERVER_URL}/users/`);
+                if (response.ok) {
+                    const data = await response.json();
+                    // Exclude the current user
+                    const filteredUsers = data.filter(
+                        (user) => user.id !== currentUser?.id
+                    );
+                    setUsers(filteredUsers);
+                } else {
+                    console.error("Error fetching users");
+                }
+            } catch (error) {
+                console.error("Error:", error);
+            }
+        };
+
+        fetchUsers();
+    }, [currentUser]);
+
     const handleAddProject = async () => {
         const projectData = {
             name,
@@ -20,8 +46,6 @@ const AddProject = () => {
         };
 
         if (currentUser) {
-            console.log("Attempting to create project with data:", projectData);
-
             try {
                 const response = await fetch(`${SERVER_URL}/projects`, {
                     method: "POST",
@@ -31,20 +55,21 @@ const AddProject = () => {
                     body: JSON.stringify(projectData),
                 });
 
-                console.log("Response from /projects:", response);
-
                 if (response.ok) {
                     const result = await response.json();
-                    console.log("Project created successfully:", result);
-                    console.log("Result ID:", result.project.id);
                     setProjectId(result.project.id);
                     setMessage(`Project "${result.name}" added successfully!`);
 
-                    console.log("Current user: " + currentUser);
+                    // Add current user as MP
                     await addCurrentUserAsMP(result.project.id, currentUser.id);
+
+                    // Add selected users as MPs
+                    for (const userId of selectedUsers) {
+                        console.log(userId);
+                        await addUserAsMP(result.project.id, userId);
+                    }
                 } else {
                     const errorData = await response.json();
-                    console.error("Error response from /projects:", errorData);
                     setMessage(`Error: ${errorData.message}`);
                 }
             } catch (error) {
@@ -55,42 +80,39 @@ const AddProject = () => {
     };
 
     const addCurrentUserAsMP = async (projectId, userId) => {
-        console.log("Adding current user as MP:", { projectId, userId });
-
         try {
-            const response = await fetch(`${SERVER_URL}/mps`, {
+            await fetch(`${SERVER_URL}/mps`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({ projectId, userId }),
             });
-
-            console.log("Response from /mps:", response);
-
-            if (response.ok) {
-                setMessage(
-                    (prevMessage) =>
-                        prevMessage +
-                        ` MP "${currentUser.name}" added successfully!`
-                );
-            } else {
-                const errorData = await response.json();
-                console.error("Error response from /mps:", errorData);
-                setMessage(
-                    (prevMessage) =>
-                        prevMessage +
-                        ` Error adding MP "${currentUser.name}": ${errorData.message}`
-                );
-            }
         } catch (error) {
-            console.error("Error adding MP:", error);
-            setMessage(
-                (prevMessage) =>
-                    prevMessage +
-                    " An unexpected error occurred while adding MP."
-            );
+            console.error("Error adding current user as MP:", error);
         }
+    };
+
+    const addUserAsMP = async (projectId, userId) => {
+        try {
+            await fetch(`${SERVER_URL}/mps`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ projectId, userId }),
+            });
+        } catch (error) {
+            console.error(`Error adding user ${userId} as MP:`, error);
+        }
+    };
+
+    const handleUserSelection = (userId, isChecked) => {
+        setSelectedUsers((prevSelected) =>
+            isChecked
+                ? [...prevSelected, userId]
+                : prevSelected.filter((id) => id !== userId)
+        );
     };
 
     return (
@@ -109,6 +131,39 @@ const AddProject = () => {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
             />
+            <div>
+                <h3>Select Members for the Project:</h3>
+                <div
+                    style={{
+                        border: "1px solid #ccc",
+                        borderRadius: "5px",
+                        padding: "10px",
+                        width: "100%",
+                        maxWidth: "400px",
+                        height: "200px",
+                        overflowY: "scroll",
+                    }}
+                >
+                    {users.map((user) => (
+                        <div key={user.id} style={{ marginBottom: "5px" }}>
+                            <label>
+                                <input
+                                    type="checkbox"
+                                    value={user.id}
+                                    onChange={(e) =>
+                                        handleUserSelection(
+                                            user.id,
+                                            e.target.checked
+                                        )
+                                    }
+                                />
+                                {user.name} ({user.email})
+                            </label>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
             <button onClick={handleAddProject}>Add Project</button>
         </div>
     );
