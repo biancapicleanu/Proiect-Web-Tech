@@ -1,7 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import "./style.css";
 
 const Toolbar = () => {
+    const [dropdownVisible, setDropdownVisible] = useState(false);
+
+    const handleLogout = () => {
+        localStorage.removeItem("userDetails");
+        window.location.href = "/login";
+    };
+
     return (
         <header className="toolbar">
             <div className="toolbar-left">
@@ -43,16 +50,28 @@ const Toolbar = () => {
                 </button>
             </div>
             <div className="toolbar-right">
-                <button
-                    className="toolbar-button user-button"
-                    onClick={() => (window.location.href = "/profile")}
-                >
-                    <img
-                        src="https://cdn-icons-png.flaticon.com/512/747/747376.png"
-                        alt="User Icon"
-                        className="toolbar-icon"
-                    />
-                </button>
+                <div className="user-menu">
+                    <button
+                        className="toolbar-button user-button"
+                        onClick={() => setDropdownVisible(!dropdownVisible)}
+                    >
+                        <img
+                            src="https://cdn-icons-png.flaticon.com/512/747/747376.png"
+                            alt="User Icon"
+                            className="toolbar-icon"
+                        />
+                    </button>
+                    {dropdownVisible && (
+                        <div className="dropdown-menu">
+                            <button
+                                className="dropdown-item"
+                                onClick={handleLogout}
+                            >
+                                Log Out
+                            </button>
+                        </div>
+                    )}
+                </div>
             </div>
         </header>
     );
