@@ -58,28 +58,35 @@ const SignUp = () => {
     };
 
     return (
-        <div className="signup-page">
-            <h2>Sign Up</h2>
-            {message && <p className="feedback-message">{message}</p>}
-            <input
-                type="email"
-                placeholder="Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-            />
-            <input
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-            />
-            <input
-                type="password"
-                placeholder="Confirm Password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-            />
-            <button onClick={handleSignUp}>Sign Up</button>
+        <div className="content">
+            <div className="signup-page">
+                <h2>Sign Up</h2>
+                {message && <p className="feedback-message">{message}</p>}
+                <input
+                    type="email"
+                    placeholder="Email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="login-input"
+                />
+                <input
+                    type="password"
+                    placeholder="Password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="login-input"
+                />
+                <input
+                    type="password"
+                    placeholder="Confirm Password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    className="login-input"
+                />
+                <button onClick={handleSignUp} className="login-button">
+                    Sign Up
+                </button>
+            </div>
         </div>
     );
 };

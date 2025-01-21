@@ -86,7 +86,7 @@ const MpProjects = () => {
                                         top: "10px",
                                         right: "10px",
                                         backgroundColor: "red",
-                                        color: "white",
+                                        color: "green",
                                         padding: "5px 10px",
                                         borderRadius: "50%",
                                         fontSize: "14px",
@@ -105,14 +105,14 @@ const MpProjects = () => {
                         <button
                             onClick={() => handleViewBugs(selectedProject.id)}
                             style={{
-                                marginTop: "10px",
-                                padding: "10px 15px",
-                                backgroundColor: "#007bff",
-                                color: "white",
-                                border: "none",
+                                // /marginTop: "10px",
+                                // /padding: "10px 15px",
+                                // backgroundColor: "#007bff",
+                                // color: "white",
                                 borderRadius: "5px",
-                                cursor: "pointer",
+                                // cursor: "pointer",
                             }}
+                            className="viewBugs-button"
                         >
                             View Bugs
                         </button>

@@ -188,7 +188,9 @@ const BugList = () => {
                                 </div>
                             ) : (
                                 <>
-                                    <h3>{bug.description}</h3>
+                                    <h3 className="bug-h3">
+                                        {bug.description}{" "}
+                                    </h3>
                                     <p className="bug-details">
                                         <strong>Severity:</strong>{" "}
                                         {bug.severity}

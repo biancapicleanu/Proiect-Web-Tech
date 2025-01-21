@@ -16,14 +16,12 @@ const AddProject = () => {
         currentUser = JSON.parse(localStorage.getItem("userDetails"));
     }
 
-    // Fetch all users except the current user
     useEffect(() => {
         const fetchUsers = async () => {
             try {
                 const response = await fetch(`${SERVER_URL}/users/`);
                 if (response.ok) {
                     const data = await response.json();
-                    // Exclude the current user
                     const filteredUsers = data.filter(
                         (user) => user.id !== currentUser?.id
                     );
@@ -125,28 +123,34 @@ const AddProject = () => {
                 placeholder="Project Repository URL"
                 value={url}
                 onChange={(e) => setURL(e.target.value)}
+                className="project-input"
+                style={{ width: "50%" }}
             />
             <input
                 type="text"
                 placeholder="Project Name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
+                className="project-input"
+                style={{ width: "50%" }}
             />
-            <div>
+            <div style={{ width: "50%" }}>
                 <h3 className="advice">Select Members for the Project:</h3>
                 <div
                     style={{
                         border: "1px solid #ccc",
                         borderRadius: "5px",
                         padding: "10px",
-                        width: "calc(100% - 15px)",
-                        maxWidth: "400px",
+                        maxWidth: "calc(100%-17px)",
                         height: "200px",
                         overflowY: "scroll",
                     }}
                 >
                     {users.map((user) => (
-                        <div key={user.id} style={{ marginBottom: "5px" }}>
+                        <div
+                            key={user.id}
+                            style={{ marginBottom: "5px", width: "100%" }}
+                        >
                             <label>
                                 <input
                                     type="checkbox"
@@ -157,6 +161,7 @@ const AddProject = () => {
                                             e.target.checked
                                         )
                                     }
+                                    style={{ width: "100%" }}
                                 />
                                 {user.name} ({user.email})
                             </label>
@@ -169,9 +174,10 @@ const AddProject = () => {
                 style={{
                     margin: "10px",
                     padding: "10px",
-                    width: "100%",
+                    width: "50%",
                 }}
                 onClick={handleAddProject}
+                className="project-button"
             >
                 Add Project
             </button>
