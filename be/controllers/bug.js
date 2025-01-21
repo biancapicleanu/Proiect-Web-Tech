@@ -13,7 +13,7 @@ const allocateMpToBug = async (req, res) => {
     try {
         const bug = await bugsService.allocateMpToBug(
             req.params.bugId,
-            req.body.mpId
+            req.body.userId
         );
         res.status(200).send({ bug });
     } catch (err) {

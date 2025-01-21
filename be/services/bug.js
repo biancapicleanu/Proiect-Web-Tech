@@ -29,18 +29,17 @@ const createBug = async (data) => {
     });
 };
 
-const allocateMpToBug = async (bugId, mpId) => {
+const allocateMpToBug = async (bugId, userId) => {
     const bug = await Bug.findByPk(bugId);
     if (!bug) {
         throw Error(`Bug with id ${bugId} does not exist.`);
     }
 
-    const mp = await Mp.findByPk(mpId);
-    if (!mp) {
-        throw Error(`MP with id ${mpId} does not exist.`);
+    if (bug.mpId) {
+        throw Error("Bug is already assigned.");
     }
 
-    bug.mpId = mpId;
+    bug.mpId = userId;
 
     await bug.save();
 

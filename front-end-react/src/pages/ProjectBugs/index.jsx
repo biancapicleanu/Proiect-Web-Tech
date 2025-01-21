@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import "./style.css";
+import { userDetails } from "../Login";
 
 const SERVER_URL = "http://localhost:8080/api/v1";
 
@@ -10,6 +11,11 @@ const BugList = () => {
     const [message, setMessage] = useState("");
     const [editableBugId, setEditableBugId] = useState(null);
     const [editData, setEditData] = useState({});
+
+    let currentUser = undefined;
+    if (localStorage.getItem("userDetails")) {
+        currentUser = JSON.parse(localStorage.getItem("userDetails"));
+    }
 
     useEffect(() => {
         const fetchBugs = async () => {
@@ -21,11 +27,10 @@ const BugList = () => {
                     const data = await response.json();
                     setBugs(data.bugs);
                 } else {
-                    setMessage("Error fetching bugs for this project.");
+                    setMessage("There are no bugs for this project.");
                 }
             } catch (error) {
-                console.error("Error fetching bugs:", error);
-                setMessage("An unexpected error occurred.");
+                console.log("Error fetching bugs:", error);
             }
         };
 
@@ -84,6 +89,34 @@ const BugList = () => {
         setEditableBugId(null);
     };
 
+    const handleAssignBug = async (bugId) => {
+        try {
+            const response = await fetch(`${SERVER_URL}/bugs/${bugId}/assign`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ userId: currentUser.id }),
+            });
+
+            if (response.ok) {
+                const updatedBug = await response.json();
+                setBugs((prevBugs) =>
+                    prevBugs.map((bug) =>
+                        bug.id === updatedBug.bug.id ? updatedBug.bug : bug
+                    )
+                );
+                setMessage("Bug assigned successfully.");
+            } else {
+                const error = await response.json();
+                setMessage(error.message || "Error assigning the bug.");
+            }
+        } catch (error) {
+            console.error("Error assigning bug:", error);
+            setMessage("An unexpected error occurred.");
+        }
+    };
+
     return (
         <div className="bug-list-page">
             <h2>Bugs for Project {projectId}</h2>
@@ -91,6 +124,10 @@ const BugList = () => {
             <div className="bug-cards-container">
                 {bugs.map((bug) => (
                     <div className="bug-card" key={bug.id}>
+                        <p>
+                            <strong>Assigned MP:</strong>{" "}
+                            {bug.mpId ? "YES" : "NO"}
+                        </p>
                         {editableBugId === bug.id ? (
                             <div className="edit-form">
                                 <input
@@ -157,12 +194,22 @@ const BugList = () => {
                                 <p>
                                     <strong>Status:</strong> {bug.status}
                                 </p>
-                                <button
-                                    className="edit-button"
-                                    onClick={() => handleEditClick(bug)}
-                                >
-                                    Edit
-                                </button>
+                                {bug.mpId === currentUser.id && (
+                                    <button
+                                        className="edit-button"
+                                        onClick={() => handleEditClick(bug)}
+                                    >
+                                        Edit
+                                    </button>
+                                )}
+                                {!bug.mpId && (
+                                    <button
+                                        className="assign-button"
+                                        onClick={() => handleAssignBug(bug.id)}
+                                    >
+                                        Assign to Me
+                                    </button>
+                                )}
                             </>
                         )}
                     </div>
