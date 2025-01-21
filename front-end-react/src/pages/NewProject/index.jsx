@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./style.css";
 
-const SERVER_URL = "http://localhost:8080/api/v1";
+const SERVER_URL = "https://proiect-web-tech.onrender.com/api/v1";
 
 const AddProject = () => {
     const [url, setURL] = useState("");

@@ -3,7 +3,7 @@ import ProjectCard from "../../components/ProjectCard";
 import { useNavigate } from "react-router-dom";
 import "./style.css";
 
-const SERVER_URL = "http://localhost:8080/api/v1";
+const SERVER_URL = "https://proiect-web-tech.onrender.com/api/v1";
 
 const TstProjects = () => {
     const [projects, setProjects] = useState([]);
