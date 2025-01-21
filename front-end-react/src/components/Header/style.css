@@ -34,3 +34,20 @@
     padding-top: 100px;
     margin: 20px;
 }
+
+.toolbar-left,
+.toolbar-center,
+.toolbar-right {
+    display: flex;
+    align-items: center;
+}
+
+.toolbar-icon {
+    width: 24px;
+    height: 24px;
+}
+
+.home-button,
+.user-button {
+    padding: 10px;
+}

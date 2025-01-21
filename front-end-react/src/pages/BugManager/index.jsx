@@ -62,64 +62,66 @@ const AddBug = () => {
     };
 
     return (
-        <div className="add-bug-page">
-            <h2>New Bug</h2>
-            {message && <p className="feedback-message">{message}</p>}
-            <div className="form-group">
-                <label>Description *</label>
-                <textarea
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                    placeholder="Describe the bug..."
-                    rows={4}
-                    required
-                />
+        <div className="content">
+            <div className="add-bug-page">
+                <h2>New Bug</h2>
+                {message && <p className="feedback-message">{message}</p>}
+                <div className="form-group">
+                    <label>Description *</label>
+                    <textarea
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                        placeholder="Describe the bug..."
+                        rows={4}
+                        required
+                    />
+                </div>
+                <div className="form-group">
+                    <label>Severity</label>
+                    <select
+                        value={severity}
+                        onChange={(e) => setSeverity(e.target.value)}
+                    >
+                        <option value="Low">Low</option>
+                        <option value="Minor">Minor</option>
+                        <option value="Major">Major</option>
+                        <option value="Critical">Critical</option>
+                    </select>
+                </div>
+                <div className="form-group">
+                    <label>Priority</label>
+                    <select
+                        value={priority}
+                        onChange={(e) => setPriority(e.target.value)}
+                    >
+                        <option value="Low">Low</option>
+                        <option value="Medium">Medium</option>
+                        <option value="High">High</option>
+                    </select>
+                </div>
+                <div className="form-group">
+                    <label>Status</label>
+                    <select
+                        value={priority}
+                        onChange={(e) => setPriority(e.target.value)}
+                    >
+                        <option value="Resolved">Resolved</option>
+                        <option value="In Progress">In Progress</option>
+                        <option value="Unresolved">Unresolved</option>
+                    </select>
+                </div>
+                <div className="form-group">
+                    <label>Commit Link *</label>
+                    <input
+                        type="url"
+                        value={commitURL}
+                        onChange={(e) => setCommitURL(e.target.value)}
+                        placeholder="Link to the related commit"
+                        required
+                    />
+                </div>
+                <button onClick={handleAddBug}>Add Bug</button>
             </div>
-            <div className="form-group">
-                <label>Severity</label>
-                <select
-                    value={severity}
-                    onChange={(e) => setSeverity(e.target.value)}
-                >
-                    <option value="Low">Low</option>
-                    <option value="Minor">Minor</option>
-                    <option value="Major">Major</option>
-                    <option value="Critical">Critical</option>
-                </select>
-            </div>
-            <div className="form-group">
-                <label>Priority</label>
-                <select
-                    value={priority}
-                    onChange={(e) => setPriority(e.target.value)}
-                >
-                    <option value="Low">Low</option>
-                    <option value="Medium">Medium</option>
-                    <option value="High">High</option>
-                </select>
-            </div>
-            <div className="form-group">
-                <label>Status</label>
-                <select
-                    value={priority}
-                    onChange={(e) => setPriority(e.target.value)}
-                >
-                    <option value="Resolved">Resolved</option>
-                    <option value="In Progress">In Progress</option>
-                    <option value="Unresolved">Unresolved</option>
-                </select>
-            </div>
-            <div className="form-group">
-                <label>Commit Link *</label>
-                <input
-                    type="url"
-                    value={commitURL}
-                    onChange={(e) => setCommitURL(e.target.value)}
-                    placeholder="Link to the related commit"
-                    required
-                />
-            </div>
-            <button onClick={handleAddBug}>Add Bug</button>
         </div>
     );
 };

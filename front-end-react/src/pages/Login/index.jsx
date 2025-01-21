@@ -44,25 +44,27 @@ const Login = () => {
     };
 
     return (
-        <div className="login-page">
-            <h2>Log In</h2>
-            {message && <p className="feedback-message">{message}</p>}
-            <input
-                type="email"
-                placeholder="Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-            />
-            <input
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-            />
-            <button onClick={handleLogin}>Log In</button>
-            <p>
-                Don't have an account? <a href="/signup">Sign Up</a>
-            </p>
+        <div className="content">
+            <div className="login-page">
+                <h2>Log In</h2>
+                {message && <p className="feedback-message">{message}</p>}
+                <input
+                    type="email"
+                    placeholder="Email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                />
+                <input
+                    type="password"
+                    placeholder="Password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                />
+                <button onClick={handleLogin}>Log In</button>
+                <p>
+                    Don't have an account? <a href="/signup">Sign Up</a>
+                </p>
+            </div>
         </div>
     );
 };
