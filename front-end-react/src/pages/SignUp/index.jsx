@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./style.css";
 
 const SERVER_URL = "http://localhost:8080/api/v1";
@@ -8,6 +9,8 @@ const SignUp = () => {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [message, setMessage] = useState("");
+
+    const navigate = useNavigate();
 
     const handleSignUp = async () => {
         if (password !== confirmPassword) {
@@ -31,10 +34,19 @@ const SignUp = () => {
 
             if (response.ok) {
                 const result = await response.json();
+                const userDetails = result;
+                console.log(result);
                 setMessage(`Account created successfully for ${result.email}!`);
                 setEmail("");
                 setPassword("");
                 setConfirmPassword("");
+
+                localStorage.setItem(
+                    "userDetails",
+                    JSON.stringify(userDetails)
+                );
+
+                navigate("/");
             } else {
                 const errorData = await response.json();
                 setMessage(`Error: ${errorData.message}`);

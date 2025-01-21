@@ -35,11 +35,12 @@ const MpProjects = () => {
                         setBugCounts(counts);
                     }
                 } else {
-                    setMessage("Error fetching your projects.");
+                    setMessage(
+                        "You do not have the role of MP in any project."
+                    );
                 }
             } catch (error) {
-                console.error("Error fetching projects:", error);
-                setMessage("An unexpected error occurred.");
+                console.log("Error fetching projects:", error.message);
             }
         };
 
@@ -57,65 +58,67 @@ const MpProjects = () => {
     };
 
     return (
-        <div className="mp-projects-page">
-            <h2>Your Projects</h2>
-            {message && <p className="feedback-message">{message}</p>}
-            <div className="projects-list">
-                {projects.map((project) => (
-                    <div
-                        key={project.id}
-                        className="project-card"
-                        onClick={() => handleProjectClick(project)}
-                        style={{
-                            border: "1px solid #ccc",
-                            borderRadius: "5px",
-                            padding: "10px",
-                            marginBottom: "10px",
-                            cursor: "pointer",
-                            position: "relative",
-                        }}
-                    >
-                        <h3>{project.name}</h3>
-                        <p>Repository: {project.repoURL}</p>
-                        {bugCounts[project.id] !== undefined && (
-                            <span
-                                style={{
-                                    position: "absolute",
-                                    top: "10px",
-                                    right: "10px",
-                                    backgroundColor: "red",
-                                    color: "white",
-                                    padding: "5px 10px",
-                                    borderRadius: "50%",
-                                    fontSize: "14px",
-                                    fontWeight: "bold",
-                                }}
-                            >
-                                {bugCounts[project.id]}
-                            </span>
-                        )}
-                    </div>
-                ))}
-            </div>
-            {selectedProject && (
-                <div className="selected-project-details">
-                    <ProjectCard project={selectedProject} />
-                    <button
-                        onClick={() => handleViewBugs(selectedProject.id)}
-                        style={{
-                            marginTop: "10px",
-                            padding: "10px 15px",
-                            backgroundColor: "#007bff",
-                            color: "white",
-                            border: "none",
-                            borderRadius: "5px",
-                            cursor: "pointer",
-                        }}
-                    >
-                        View Bugs
-                    </button>
+        <div className="content">
+            <div className="project-container">
+                <h2>Your Projects</h2>
+                {message && <p className="feedback-message">{message}</p>}
+                <div className="project-list">
+                    {projects.map((project) => (
+                        <div
+                            key={project.id}
+                            className="project-item"
+                            onClick={() => handleProjectClick(project)}
+                            style={{
+                                border: "1px solid #ccc",
+                                borderRadius: "5px",
+                                padding: "10px",
+                                marginBottom: "10px",
+                                cursor: "pointer",
+                                position: "relative",
+                            }}
+                        >
+                            <h3>{project.name}</h3>
+                            <p>Repository: {project.repoURL}</p>
+                            {bugCounts[project.id] !== undefined && (
+                                <span
+                                    style={{
+                                        position: "absolute",
+                                        top: "10px",
+                                        right: "10px",
+                                        backgroundColor: "red",
+                                        color: "white",
+                                        padding: "5px 10px",
+                                        borderRadius: "50%",
+                                        fontSize: "14px",
+                                        fontWeight: "bold",
+                                    }}
+                                >
+                                    {bugCounts[project.id]}
+                                </span>
+                            )}
+                        </div>
+                    ))}
                 </div>
-            )}
+                {selectedProject && (
+                    <div className="project-details">
+                        <ProjectCard project={selectedProject} />
+                        <button
+                            onClick={() => handleViewBugs(selectedProject.id)}
+                            style={{
+                                marginTop: "10px",
+                                padding: "10px 15px",
+                                backgroundColor: "#007bff",
+                                color: "white",
+                                border: "none",
+                                borderRadius: "5px",
+                                cursor: "pointer",
+                            }}
+                        >
+                            View Bugs
+                        </button>
+                    </div>
+                )}
+            </div>
         </div>
     );
 };

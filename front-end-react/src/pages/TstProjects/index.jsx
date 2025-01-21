@@ -50,39 +50,41 @@ const TstProjects = () => {
     };
 
     return (
-        <div className="tst-projects-page">
-            <h2>Your Projects</h2>
-            {message && <p className="feedback-message">{message}</p>}
-            <div className="projects-list">
-                {projects.map((project) => (
-                    <div
-                        key={project.id}
-                        className="project-card"
-                        onClick={() => handleProjectClick(project)}
-                        style={{
-                            border: "1px solid #ccc",
-                            borderRadius: "5px",
-                            padding: "10px",
-                            marginBottom: "10px",
-                            cursor: "pointer",
-                        }}
-                    >
-                        <h3>{project.name}</h3>
-                        <p>Repository: {project.repoURL}</p>
-                    </div>
-                ))}
-            </div>
-            {selectedProject && (
-                <div className="selected-project-details">
-                    <ProjectCard project={selectedProject} />
-                    <button
-                        id="bug-button"
-                        onClick={() => handleAddBug(selectedProject.id)}
-                    >
-                        Add new bug
-                    </button>
+        <div className="content">
+            <div className="project-container">
+                <h2>Your Projects</h2>
+                {message && <p className="feedback-message">{message}</p>}
+                <div className="project-list">
+                    {projects.map((project) => (
+                        <div
+                            key={project.id}
+                            className="project-item"
+                            onClick={() => handleProjectClick(project)}
+                            style={{
+                                border: "1px solid #ccc",
+                                borderRadius: "5px",
+                                padding: "10px",
+                                marginBottom: "10px",
+                                cursor: "pointer",
+                            }}
+                        >
+                            <h3>{project.name}</h3>
+                            <p>Repository: {project.repoURL}</p>
+                        </div>
+                    ))}
                 </div>
-            )}
+                {selectedProject && (
+                    <div className="project-details">
+                        <ProjectCard project={selectedProject} />
+                        <button
+                            id="bug-button"
+                            onClick={() => handleAddBug(selectedProject.id)}
+                        >
+                            Add new bug
+                        </button>
+                    </div>
+                )}
+            </div>
         </div>
     );
 };

@@ -3,7 +3,7 @@ import * as usersService from "../services/user.js";
 const createUser = async (req, res) => {
     try {
         const newUser = await usersService.createUser(req.body);
-        res.status(201).json({ email: newUser.email });
+        res.status(201).json({ id: newUser.id, email: newUser.email });
     } catch (error) {
         res.status(400).json({ message: error.message });
     }

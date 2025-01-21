@@ -2,7 +2,6 @@ import React from "react";
 import "./style.css";
 
 const ProjectCard = ({ project }) => {
-    console.log(project);
     if (!project) {
         return <p>No project selected.</p>;
     }
@@ -21,7 +20,6 @@ const ProjectCard = ({ project }) => {
                 <strong>Updated At:</strong>{" "}
                 {new Date(project.updatedAt).toLocaleDateString()}
             </p>
-            {/* Adaugă alte detalii ale proiectului dacă este cazul */}
         </div>
     );
 };

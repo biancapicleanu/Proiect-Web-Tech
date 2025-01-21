@@ -1,14 +1,14 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./style.css";
 
 const SERVER_URL = "http://localhost:8080/api/v1";
-
-export let userDetails;
 
 const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [message, setMessage] = useState("");
+    const navigate = useNavigate();
 
     const handleLogin = async () => {
         const loginData = { email, password };
@@ -23,13 +23,16 @@ const Login = () => {
             });
 
             if (response.ok) {
-                userDetails = await response.json();
+                const userDetails = await response.json();
                 setMessage(`Welcome back, ${userDetails.email}!`);
                 console.log(userDetails);
+
                 localStorage.setItem(
                     "userDetails",
                     JSON.stringify(userDetails)
                 );
+
+                navigate("/");
             } else {
                 const error = await response.json();
                 setMessage(`Error: ${error.message}`);

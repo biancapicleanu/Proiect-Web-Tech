@@ -19,7 +19,10 @@ const createUser = async (data) => {
         password,
     });
 
-    return newUser;
+    return {
+        id: newUser.dataValues.id,
+        email: newUser.dataValues.email,
+    };
 };
 
 const loginUser = async (email, password) => {

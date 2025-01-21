@@ -58,12 +58,13 @@ const AddProject = () => {
                 if (response.ok) {
                     const result = await response.json();
                     setProjectId(result.project.id);
-                    setMessage(`Project "${result.name}" added successfully!`);
+                    console.log(result);
+                    setMessage(
+                        `Project "${result.project.name}" added successfully!`
+                    );
 
-                    // Add current user as MP
                     await addCurrentUserAsMP(result.project.id, currentUser.id);
 
-                    // Add selected users as MPs
                     for (const userId of selectedUsers) {
                         console.log(userId);
                         await addUserAsMP(result.project.id, userId);
@@ -116,7 +117,7 @@ const AddProject = () => {
     };
 
     return (
-        <div className="add-project-page">
+        <div className="content" id="add-project-container">
             <h2>Add New Project</h2>
             {message && <p className="feedback-message">{message}</p>}
             <input
@@ -132,13 +133,13 @@ const AddProject = () => {
                 onChange={(e) => setName(e.target.value)}
             />
             <div>
-                <h3>Select Members for the Project:</h3>
+                <h3 className="advice">Select Members for the Project:</h3>
                 <div
                     style={{
                         border: "1px solid #ccc",
                         borderRadius: "5px",
                         padding: "10px",
-                        width: "100%",
+                        width: "calc(100% - 15px)",
                         maxWidth: "400px",
                         height: "200px",
                         overflowY: "scroll",
@@ -164,7 +165,16 @@ const AddProject = () => {
                 </div>
             </div>
 
-            <button onClick={handleAddProject}>Add Project</button>
+            <button
+                style={{
+                    margin: "10px",
+                    padding: "10px",
+                    width: "100%",
+                }}
+                onClick={handleAddProject}
+            >
+                Add Project
+            </button>
         </div>
     );
 };

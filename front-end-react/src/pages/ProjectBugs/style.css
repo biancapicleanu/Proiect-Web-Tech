@@ -85,8 +85,8 @@
     background-color: #6100e0;
 }
 
-p {
-    color: #000000;
+.bug-details {
+    color: #000000 !important;
 }
 
 h3 {

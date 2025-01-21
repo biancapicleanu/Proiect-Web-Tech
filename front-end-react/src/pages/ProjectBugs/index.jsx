@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import "./style.css";
-import { userDetails } from "../Login";
 
 const SERVER_URL = "http://localhost:8080/api/v1";
 
@@ -118,102 +117,112 @@ const BugList = () => {
     };
 
     return (
-        <div className="bug-list-page">
-            <h2>Bugs for Project {projectId}</h2>
-            {message && <p className="feedback-message">{message}</p>}
-            <div className="bug-cards-container">
-                {bugs.map((bug) => (
-                    <div className="bug-card" key={bug.id}>
-                        <p>
-                            <strong>Assigned MP:</strong>{" "}
-                            {bug.mpId ? "YES" : "NO"}
-                        </p>
-                        {editableBugId === bug.id ? (
-                            <div className="edit-form">
-                                <input
-                                    type="text"
-                                    name="description"
-                                    value={editData.description}
-                                    onChange={handleInputChange}
-                                    placeholder="Description"
-                                />
-                                <select
-                                    name="severity"
-                                    value={editData.severity}
-                                    onChange={handleInputChange}
-                                >
-                                    <option value="Low">Low</option>
-                                    <option value="Minor">Minor</option>
-                                    <option value="Major">Major</option>
-                                    <option value="Critical">Critical</option>
-                                </select>
-                                <select
-                                    name="priority"
-                                    value={editData.priority}
-                                    onChange={handleInputChange}
-                                >
-                                    <option value="Low">Low</option>
-                                    <option value="Medium">Medium</option>
-                                    <option value="High">High</option>
-                                </select>
-                                <select
-                                    name="status"
-                                    value={editData.status}
-                                    onChange={handleInputChange}
-                                >
-                                    <option value="Resolved">Resolved</option>
-                                    <option value="In Progress">
-                                        In Progress
-                                    </option>
-                                    <option value="Unresolved">
-                                        Unresolved
-                                    </option>
-                                </select>
-                                <button
-                                    className="save-button"
-                                    onClick={() => handleSaveClick(bug.id)}
-                                >
-                                    Save
-                                </button>
-                                <button
-                                    className="cancel-button"
-                                    onClick={handleCancelClick}
-                                >
-                                    Cancel
-                                </button>
-                            </div>
-                        ) : (
-                            <>
-                                <h3>{bug.description}</h3>
-                                <p>
-                                    <strong>Severity:</strong> {bug.severity}
-                                </p>
-                                <p>
-                                    <strong>Priority:</strong> {bug.priority}
-                                </p>
-                                <p>
-                                    <strong>Status:</strong> {bug.status}
-                                </p>
-                                {bug.mpId === currentUser.id && (
-                                    <button
-                                        className="edit-button"
-                                        onClick={() => handleEditClick(bug)}
+        <div className="content">
+            <div className="bug-list-page">
+                <h2>Bugs for Project {projectId}</h2>
+                {message && <p className="feedback-message">{message}</p>}
+                <div className="bug-cards-container">
+                    {bugs.map((bug) => (
+                        <div className="bug-card" key={bug.id}>
+                            <p className="bug-details">
+                                <strong>Assigned MP:</strong>{" "}
+                                {bug.mpId ? "YES" : "NO"}
+                            </p>
+                            {editableBugId === bug.id ? (
+                                <div className="edit-form">
+                                    <input
+                                        type="text"
+                                        name="description"
+                                        value={editData.description}
+                                        onChange={handleInputChange}
+                                        placeholder="Description"
+                                    />
+                                    <select
+                                        name="severity"
+                                        value={editData.severity}
+                                        onChange={handleInputChange}
                                     >
-                                        Edit
-                                    </button>
-                                )}
-                                {!bug.mpId && (
-                                    <button
-                                        className="assign-button"
-                                        onClick={() => handleAssignBug(bug.id)}
+                                        <option value="Low">Low</option>
+                                        <option value="Minor">Minor</option>
+                                        <option value="Major">Major</option>
+                                        <option value="Critical">
+                                            Critical
+                                        </option>
+                                    </select>
+                                    <select
+                                        name="priority"
+                                        value={editData.priority}
+                                        onChange={handleInputChange}
                                     >
-                                        Assign to Me
+                                        <option value="Low">Low</option>
+                                        <option value="Medium">Medium</option>
+                                        <option value="High">High</option>
+                                    </select>
+                                    <select
+                                        name="status"
+                                        value={editData.status}
+                                        onChange={handleInputChange}
+                                    >
+                                        <option value="Resolved">
+                                            Resolved
+                                        </option>
+                                        <option value="In Progress">
+                                            In Progress
+                                        </option>
+                                        <option value="Unresolved">
+                                            Unresolved
+                                        </option>
+                                    </select>
+                                    <button
+                                        className="save-button"
+                                        onClick={() => handleSaveClick(bug.id)}
+                                    >
+                                        Save
                                     </button>
-                                )}
-                            </>
-                        )}
-                    </div>
-                ))}
+                                    <button
+                                        className="cancel-button"
+                                        onClick={handleCancelClick}
+                                    >
+                                        Cancel
+                                    </button>
+                                </div>
+                            ) : (
+                                <>
+                                    <h3>{bug.description}</h3>
+                                    <p className="bug-details">
+                                        <strong>Severity:</strong>{" "}
+                                        {bug.severity}
+                                    </p>
+                                    <p className="bug-details">
+                                        <strong>Priority:</strong>{" "}
+                                        {bug.priority}
+                                    </p>
+                                    <p className="bug-details">
+                                        <strong>Status:</strong> {bug.status}
+                                    </p>
+                                    {bug.mpId === currentUser.id && (
+                                        <button
+                                            className="edit-button"
+                                            onClick={() => handleEditClick(bug)}
+                                        >
+                                            Edit
+                                        </button>
+                                    )}
+                                    {!bug.mpId && (
+                                        <button
+                                            className="assign-button"
+                                            onClick={() =>
+                                                handleAssignBug(bug.id)
+                                            }
+                                        >
+                                            Assign to Me
+                                        </button>
+                                    )}
+                                </>
+                            )}
+                        </div>
+                    ))}
+                </div>
             </div>
         </div>
     );

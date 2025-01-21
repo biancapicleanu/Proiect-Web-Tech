@@ -12,7 +12,6 @@ const AllProjects = () => {
         currentUser = JSON.parse(localStorage.getItem("userDetails"));
     }
 
-    // Fetch all projects
     useEffect(() => {
         const fetchProjects = async () => {
             try {
@@ -32,7 +31,6 @@ const AllProjects = () => {
         fetchProjects();
     }, []);
 
-    // Handle click on a project to make the current user a tester
     const handleBecomeTester = async (projectId) => {
         if (!currentUser) {
             setMessage("You must be logged in to become a tester.");
@@ -70,14 +68,14 @@ const AllProjects = () => {
     };
 
     return (
-        <div className="all-projects-page">
+        <div className="content">
             <h2>All Projects</h2>
             {message && <p className="feedback-message">{message}</p>}
-            <div className="projects-list">
+            <div className="project-list">
                 {projects.map((project) => (
                     <div
                         key={project.id}
-                        className="project-card"
+                        className="project-item"
                         onClick={() => handleBecomeTester(project.id)}
                         style={{
                             border: "1px solid #ccc",
